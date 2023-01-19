@@ -8,7 +8,7 @@ make bootstrap
 ```
 It installs what the code needs to compile.
 
-Step 2. Type this to get the binaries in the `binary` folder.
+Step 2. Type this to get the binaries in the `./binary` folder.
 ```sh
 make build
 ```
