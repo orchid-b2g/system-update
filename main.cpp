@@ -6,8 +6,8 @@
 
 #include <curl/curl.h>
 
-// Check for updates every minute
-constexpr std::chrono::minutes kUpdateCheckInterval(1);
+// Check for updates every 10 minutes
+constexpr std::chrono::minutes kUpdateCheckInterval(10);
 
 // Write callback function for CURL
 size_t writeCallback(char *ptr, size_t size, size_t nmemb, void *userdata)
@@ -90,21 +90,38 @@ void installUpdates()
   {
     std::cerr << "Error extracting update file" << std::endl;
   }
-}
-
-std::string getLatestUpdate()
-{
-  std::string updateList = retrieveUpdateList();
-  std::string updateFilename;
-  while (getNextUpdate(updateList, updateFilename))
+  else
   {
-    // Do nothing, just get the last update in the list
+    // Restart the system
+    std::string restartCommand = "reboot";
+    if (system(restartCommand.c_str()) != 0)
+    {
+      std::cerr << "Error rebooting the system" << std::endl;
+    }
   }
-  return updateFilename;
 }
 
 int main()
 {
-  getLatestUpdate();
+  while (true)
+  {
+    // Retrieve the update list
+    std::string updateList = retrieveUpdateList();
+
+    // Get the latest update
+    std::string updateFilename;
+    if (getNextUpdate(updateList, updateFilename))
+    {
+      // Download the update
+      downloadUpdate(updateFilename);
+
+      // Install the update
+      installUpdates();
+    }
+
+    // Sleep for the update check interval
+    std::this_thread::sleep_for(kUpdateCheckInterval);
+  }
+
   return 0;
 }

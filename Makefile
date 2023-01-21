@@ -4,6 +4,7 @@ bootstrap:
 	sudo apt install libcurl4-openssl-dev
 
 build:
+	rm -rf binary
 	mkdir binary
 	g++ `pkg-config --cflags libcurl` main.cpp -o ./binary/system-update `pkg-config --libs libcurl`
 	cp /lib/x86_64-linux-gnu/libcurl.so.4.7.0 ./binary/libcurl4.so
