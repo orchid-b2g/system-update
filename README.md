@@ -6,7 +6,7 @@ Step 1. Open terminal and type
 ```sh
 make bootstrap
 ```
-It installs what the code needs to compile.
+It installs the libraries the code needs to compile.
 
 Step 2. Type this to get the binaries in the `./binary` folder.
 ```sh
